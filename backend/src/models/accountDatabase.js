@@ -1,11 +1,21 @@
 const Pool = require('pg').Pool
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
+
 const pool = new Pool({
-    user: 'me',
-    host: 'localhost',
-    database: 'bank',
-    password: 'password',
-    port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 })
+
+async function createAccountTable() {
+    pool.query('CREATE TABLE IF NOT EXISTS account (id SERIAL PRIMARY KEY, name VARCHAR(255), password VARCHAR(255), balance INT)', (error, results) => {
+        if (error) {
+            throw error
+        }
+    })
+}
 
 const getAccounts = () => {
     pool.query('SELECT * FROM account ORDER BY id ASC', (error, results) => {
@@ -53,6 +63,8 @@ const updateAccount = (request) => {
         }
     )
 }
+
+createAccountTable()
 
 module.exports = {
     getAccounts,
