@@ -1,12 +1,12 @@
 import React from "react";
 import { useState } from "react";
-
+import styled from "styled-components";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     
-    const backend_url =  process.env.REACT_APP_BACKEND_URL;
+    const backend_url =  process.env.REACT_APP_BACKEND_URL as string;
     
     const onLogin = async ( email: string, password: string ) => {
         const response = await fetch(backend_url, {
@@ -24,7 +24,7 @@ const Login = () => {
         <form
         onSubmit={async (e) => {
             e.preventDefault();
-            await onLogin({ email, password });
+            await onLogin( email, password );
         }}
         >
         <input
